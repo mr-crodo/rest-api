@@ -1,0 +1,32 @@
+{
+  "name": "rest-api",
+  "version": "1.0.0",
+  "description": "Full Stack Aplication RestAPI",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mr-crodo/rest-api.git"
+  },
+  "keywords": [
+    "js",
+    "rest",
+    "api"
+  ],
+  "author": "Nasib Mammadov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mr-crodo/rest-api/issues"
+  },
+  "homepage": "https://github.com/mr-crodo/rest-api#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
