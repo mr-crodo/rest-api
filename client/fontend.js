@@ -1,16 +1,25 @@
 import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.esm.browser.js'
 
+
+Vue.component("loader", {
+  template: `
+    <div class="d-flex justify-content-center">
+      <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+  `
+})
 new Vue({
   el: '#app',
   data() {
     return {
+      loading: false,
       form: {
         name: '',
         value: ''
       },
-      contacts: [
-        {id: 1, name: 'Насиб Мамедов', value: '+994-50-701-00-91', marked: false}
-      ]
+      contacts: []
     }
   },
   computed: {
@@ -19,18 +28,49 @@ new Vue({
     }
   },
   methods: {
-    createContact() {
+    async createContact() {
       const {...contact} = this.form
-      this.contacts.push({...contact, id: Date.now()})
-      
+      const newContact = await request('/api/contacts', 'POST', contact)
+      this.contacts.push(newContact)
       this.form.name = this.form.value = '';
     },
-    markContact(id) {
+    async markContact(id) {
       const contact = this.contacts.find(c => c.id === id)
-      contact.marked = true;
+      const updated = await request(`/api/contacts/${id}`, 'PUT', {
+        ...contact,
+        marked: true
+      })
+      contact.marked = updated.marked
     },
-    removeContact(id) {
-
+    async removeContact(id) {
+      await request(`/api/contacts/${id}`, 'DELETE')
+      this.contacts = this.contacts.filter(c => c.id !== id)
     }
+  },
+  async mounted() {
+    this.loading = true
+    this.contacts = await request('/api/contacts')
+    this.loading = false
   }
 })
+
+async function request(url, method = 'GET', data = null) {
+  try {
+    const headers = {}
+    let body
+
+    if (data) {
+      headers['Content-Type'] = 'application/json'
+      body = JSON.stringify(data)
+    }
+
+    const response = await fetch(url, {
+      method,
+      headers,
+      body
+    })
+    return await response.json()
+  } catch (err) {
+    console.warn("Qaqa sef tutan deilem ama elabil ki quşdadın", err.message);
+  }
+}
