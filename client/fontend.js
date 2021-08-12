@@ -71,6 +71,6 @@ async function request(url, method = 'GET', data = null) {
     })
     return await response.json()
   } catch (err) {
-    console.warn("Qaqa sef tutan deilem ama elabil ki quşdadın", err.message);
+    console.warn("Error: ", err.message);
   }
 }
